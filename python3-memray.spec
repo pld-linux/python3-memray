@@ -19,6 +19,7 @@ BuildRequires:	lz4-devel
 BuildRequires:	pkgconfig
 BuildRequires:	python3-Cython
 BuildRequires:	python3-modules >= 1:3.7
+BuildRequires:	python3-pkgconfig
 BuildRequires:	python3-setuptools
 %if %{with tests}
 BuildRequires:	python3-greenlet
