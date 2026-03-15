@@ -6,18 +6,20 @@
 Summary:	A memory profiler for Python applications
 Summary(pl.UTF-8):	Profilter pamięciowy dla aplikacji w Pythonie
 Name:		python3-memray
-Version:	1.19.1
+Version:	1.19.2
 Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/memray/
 Source0:	https://files.pythonhosted.org/packages/source/m/memray/memray-%{version}.tar.gz
-# Source0-md5:	2142af623ddf0bd4b46944d9940d0dc7
+# Source0-md5:	1f9e6d180e3ab42826d1b0a39183b704
 URL:		https://pypi.org/project/memray/
+BuildRequires:	elfutils-debuginfod-devel
 BuildRequires:	libstdc++-devel >= 6:7
-BuildRequires:	lz4-devel
+BuildRequires:	libunwind-devel
+BuildRequires:	lz4-devel >= 1.9.4
 BuildRequires:	pkgconfig
-BuildRequires:	python3-Cython
+BuildRequires:	python3-Cython >= 0.29.31
 BuildRequires:	python3-modules >= 1:3.7
 BuildRequires:	python3-pkgconfig
 BuildRequires:	python3-setuptools
