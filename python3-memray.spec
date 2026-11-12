@@ -6,23 +6,25 @@
 Summary:	A memory profiler for Python applications
 Summary(pl.UTF-8):	Profilter pamięciowy dla aplikacji w Pythonie
 Name:		python3-memray
-Version:	1.19.2
+Version:	1.20.0
 Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/memray/
 Source0:	https://files.pythonhosted.org/packages/source/m/memray/memray-%{version}.tar.gz
-# Source0-md5:	1f9e6d180e3ab42826d1b0a39183b704
+# Source0-md5:	c20838dd19515d1b486ae434f101197a
 URL:		https://pypi.org/project/memray/
+BuildRequires:	cmake >= 3.30
 BuildRequires:	elfutils-debuginfod-devel
 BuildRequires:	libstdc++-devel >= 6:7
 BuildRequires:	libunwind-devel
 BuildRequires:	lz4-devel >= 1.9.4
 BuildRequires:	pkgconfig
-BuildRequires:	python3-Cython >= 0.29.31
-BuildRequires:	python3-modules >= 1:3.7
-BuildRequires:	python3-pkgconfig
-BuildRequires:	python3-setuptools
+BuildRequires:	python3-Cython >= 3.1
+BuildRequires:	python3-build
+BuildRequires:	python3-installer
+BuildRequires:	python3-modules >= 1:3.9
+BuildRequires:	python3-scikit-build-core >= 0.9
 %if %{with tests}
 BuildRequires:	python3-greenlet
 BuildRequires:	python3-ipython
@@ -33,20 +35,17 @@ BuildRequires:	python3-pytest-cov
 BuildRequires:	python3-pytest-textual-snapshot
 BuildRequires:	python3-rich >= 11.2.0
 BuildRequires:	python3-textual >= 0.43
-%if "%{py3_ver}" == "3.7"
-BuildRequires:	python3-typing_extensions
-%endif
 %endif
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.714
+BuildRequires:	rpmbuild(macros) >= 2.044
 %if %{with doc}
 BuildRequires:	python3-furo
 BuildRequires:	python3-ipython
 BuildRequires:	python3-sphinx_argparse
 BuildRequires:	sphinx-pdg-3
 %endif
-Requires:	python3-modules >= 1:3.7
+Requires:	python3-modules >= 1:3.9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -82,7 +81,7 @@ Dokumentacja API modułu Pythona memray.
 %setup -q -n memray-%{version}
 
 %build
-%py3_build
+%py3_build_pyproject
 
 %if %{with tests}
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
@@ -98,7 +97,7 @@ PYTEST_PLUGINS=pytest_cov.plugin \
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%py3_install
+%py3_install_pyproject
 
 %{__rm} $RPM_BUILD_ROOT%{py3_sitedir}/memray/*.pyx
 
@@ -109,7 +108,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc NEWS.rst README.md
 %attr(755,root,root) %{_bindir}/memray
-%attr(755,root,root) %{_bindir}/memray%{py3_ver}
 %dir %{py3_sitedir}/memray
 %{py3_sitedir}/memray/_inject.abi3.so
 %{py3_sitedir}/memray/_memray.cpython-*.so
@@ -121,7 +119,7 @@ rm -rf $RPM_BUILD_ROOT
 %{py3_sitedir}/memray/_ipython
 %{py3_sitedir}/memray/commands
 %{py3_sitedir}/memray/reporters
-%{py3_sitedir}/memray-%{version}-py*.egg-info
+%{py3_sitedir}/memray-%{version}.dist-info
 
 %if %{with doc}
 %files apidocs
